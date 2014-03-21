@@ -102,7 +102,6 @@ func URandom() string {
 	f.Read(b)
 	f.Close()
 
-	str := fmt.Sprintf("%x", b)
-	return str
+	return fmt.Sprintf("%x", b)
 }
 

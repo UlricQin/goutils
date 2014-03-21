@@ -39,11 +39,6 @@ func Unlink(file string) error {
 	return os.Remove(file)
 }
 
-// rename file name
-func Rename(file string, to string) error {
-	return os.Rename(file, to)
-}
-
 // IsFile checks whether the path is a file,
 // it returns false when it's a directory or does not exist.
 func IsFile(filePath string) bool {
