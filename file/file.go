@@ -114,7 +114,7 @@ func WriteBytesToFile(filePath string, b []byte) (int, error) {
 
 // WriteStringFile saves content type 'string' to file by given path.
 // It returns error when fail to finish operation.
-func WriteStringFile(filePath string, s string) (int, error) {
+func WriteStringToFile(filePath string, s string) (int, error) {
 	return WriteBytesToFile(filePath, []byte(s))
 }
 
