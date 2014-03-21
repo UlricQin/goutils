@@ -1,11 +1,10 @@
-package file
+package filetool
 
 import (
 	"path"
 	"path/filepath"
 	"os"
 	"errors"
-	"io/ioutil"
 )
 
 // SelfPath gets compiled executable file absolute path
@@ -95,38 +94,5 @@ func FileSize(file string) (int64, error) {
 	return f.Size(), nil
 }
 
-// WriteBytesToFile saves content type '[]byte' to file by given path.
-// It returns error when fail to finish operation.
-func WriteBytesToFile(filePath string, b []byte) (int, error) {
-	os.MkdirAll(path.Dir(filePath), os.ModePerm)
-	fw, err := os.Create(filePath)
-	if err != nil {
-		return 0, err
-	}
-	defer fw.Close()
-	return fw.Write(b)
-}
 
-// WriteStringFile saves content type 'string' to file by given path.
-// It returns error when fail to finish operation.
-func WriteStringToFile(filePath string, s string) (int, error) {
-	return WriteBytesToFile(filePath, []byte(s))
-}
-
-// ReadFileToBytes reads data type '[]byte' from file by given path.
-// It returns error when fail to finish operation.
-func ReadFileToBytes(filePath string) ([]byte, error) {
-	b, err := ioutil.ReadFile(filePath)
-	if err != nil {
-		return []byte(""), err
-	}
-	return b, nil
-}
-
-// ReadFileToString reads data type 'string' from file by given path.
-// It returns error when fail to finish operation.
-func ReadFileToString(filePath string) (string, error) {
-	b, err := ReadFileToBytes(filePath)
-	return string(b), err
-}
 

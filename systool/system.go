@@ -1,7 +1,7 @@
-package system
+package systool
 
 import (
-	"github.com/ulricqin/goutils/file"
+	"github.com/ulricqin/goutils/filetool"
 	"fmt"
 	"os"
 	"os/exec"
@@ -12,10 +12,10 @@ import (
 
 func WritePidFile(pidFilePath string) error {
 	if pidFilePath == "" {
-		panic("parameter pidFilePath(pid filepath) is blank")
+		panic("parameter pidFilePath is blank")
 	}
 
-	_, err := file.WriteStringToFile(pidFilePath, fmt.Sprintf("%d", os.Getpid()))
+	_, err := filetool.WriteStringToFile(pidFilePath, fmt.Sprintf("%d", os.Getpid()))
 	if err != nil {
 		return err
 	}

@@ -1,4 +1,4 @@
-package slice
+package slicetool
 
 func SliceContains(sl []interface{}, v interface{}) bool {
 	for _, vv := range sl {
