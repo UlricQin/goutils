@@ -100,7 +100,7 @@ func FileSize(file string) (int64, error) {
 	return f.Size(), nil
 }
 
-// SaveFile saves content type '[]byte' to file by given path.
+// WriteBytesToFile saves content type '[]byte' to file by given path.
 // It returns error when fail to finish operation.
 func WriteBytesToFile(filePath string, b []byte) (int, error) {
 	os.MkdirAll(path.Dir(filePath), os.ModePerm)
@@ -112,13 +112,13 @@ func WriteBytesToFile(filePath string, b []byte) (int, error) {
 	return fw.Write(b)
 }
 
-// SaveFileS saves content type 'string' to file by given path.
+// WriteStringFile saves content type 'string' to file by given path.
 // It returns error when fail to finish operation.
 func WriteStringFile(filePath string, s string) (int, error) {
 	return WriteBytesToFile(filePath, []byte(s))
 }
 
-// ReadFile reads data type '[]byte' from file by given path.
+// ReadFileToBytes reads data type '[]byte' from file by given path.
 // It returns error when fail to finish operation.
 func ReadFileToBytes(filePath string) ([]byte, error) {
 	b, err := ioutil.ReadFile(filePath)
@@ -128,7 +128,7 @@ func ReadFileToBytes(filePath string) ([]byte, error) {
 	return b, nil
 }
 
-// ReadFileS reads data type 'string' from file by given path.
+// ReadFileToString reads data type 'string' from file by given path.
 // It returns error when fail to finish operation.
 func ReadFileToString(filePath string) (string, error) {
 	b, err := ReadFileToBytes(filePath)
