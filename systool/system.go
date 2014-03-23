@@ -2,12 +2,16 @@ package systool
 
 import (
 	"github.com/ulricqin/goutils/filetool"
+	"github.com/ulricqin/goutils/convertor"
 	"fmt"
 	"os"
 	"os/exec"
 	"strconv"
 	"net"
 	"strings"
+	"math/rand"
+	"time"
+	"bytes"
 )
 
 func WritePidFile(pidFilePath string) error {
@@ -46,7 +50,7 @@ func LocalIP() (string, error) {
 	return host, nil
 }
 
-func LocalHostname() (hostname string, err error) {
+func LocalDnsName() (hostname string, err error) {
 	var ip string
 	ip, err = LocalIP()
 	if err != nil {
@@ -104,4 +108,15 @@ func URandom() string {
 
 	return fmt.Sprintf("%x", b)
 }
+
+func GenerateRandomSeed() int64 {
+	return convertor.BytesToInt64([]byte(URandom()))
+}
+
+func SleepRandomDuration(t int) {
+	r := rand.New(rand.NewSource(GenerateRandomSeed()))
+	d := time.Duration(r.Intn(t)) * time.Millisecond
+	time.Sleep(d)
+}
+
 
