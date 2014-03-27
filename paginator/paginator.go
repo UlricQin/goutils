@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
-	"xiaomi.com/sre/falcon/uic/modules/utils"
+	"github.com/ulricqin/goutils/convertor"
 )
 
 type Paginator struct {
@@ -36,7 +36,7 @@ func (p *Paginator) Nums() int64 {
 }
 
 func (p *Paginator) SetNums(nums interface{}) {
-	p.nums, _ = utils.NumUtil.ToInt64(nums)
+	p.nums, _ = convertor.ToInt64(nums)
 }
 
 func (p *Paginator) Page() int {
