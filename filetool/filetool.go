@@ -28,6 +28,17 @@ func Dir(file string) string {
 	return path.Dir(file)
 }
 
+func InsureDir(path string) error {
+	if IsExist(path){
+		return nil
+	}
+	return os.MkdirAll(path, os.ModePerm)
+}
+
+func Ext(file string) string {
+	return path.Ext(file)
+}
+
 // rename file name
 func Rename(file string, to string) error {
 	return os.Rename(file, to)
