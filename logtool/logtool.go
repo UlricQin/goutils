@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"strings"
 	"time"
-	"os"
 )
 
 var level int = 0
@@ -12,8 +11,8 @@ var level int = 0
 func SetLevelWithDefault(lv, defaultLv string) {
 	err := SetLevel(lv)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "log level not valid. use default level: %s", defaultLv)
 		SetLevel(defaultLv)
+		Warn("log level not valid. use default level: %s", defaultLv)
 	}
 }
 
