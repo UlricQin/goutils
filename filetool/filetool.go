@@ -1,10 +1,11 @@
 package filetool
 
 import (
+	"errors"
+	"io/ioutil"
+	"os"
 	"path"
 	"path/filepath"
-	"os"
-	"errors"
 )
 
 // SelfPath gets compiled executable file absolute path
@@ -29,7 +30,7 @@ func Dir(file string) string {
 }
 
 func InsureDir(path string) error {
-	if IsExist(path){
+	if IsExist(path) {
 		return nil
 	}
 	return os.MkdirAll(path, os.ModePerm)
@@ -105,5 +106,59 @@ func FileSize(file string) (int64, error) {
 	return f.Size(), nil
 }
 
+// list dirs under dirPath
+func DirsUnder(dirPath string) ([]string, error) {
+	if !IsExist(dirPath) {
+		return []string{}, nil
+	}
 
+	fs, err := ioutil.ReadDir(dirPath)
+	if err != nil {
+		return []string{}, err
+	}
 
+	sz := len(fs)
+	if sz == 0 {
+		return []string{}, nil
+	}
+
+	ret := []string{}
+	for i := 0; i < sz; i++ {
+		if fs[i].IsDir() {
+			name := fs[i].Name()
+			if name != "." && name != ".." {
+				ret = append(ret, name)
+			}
+		}
+	}
+
+	return ret, nil
+
+}
+
+// list files under dirPath
+func FilesUnder(dirPath string) ([]string, error) {
+	if !IsExist(dirPath) {
+		return []string{}, nil
+	}
+
+	fs, err := ioutil.ReadDir(dirPath)
+	if err != nil {
+		return []string{}, err
+	}
+
+	sz := len(fs)
+	if sz == 0 {
+		return []string{}, nil
+	}
+
+	ret := []string{}
+	for i := 0; i < sz; i++ {
+		if !fs[i].IsDir() {
+			ret = append(ret, fs[i].Name())
+		}
+	}
+
+	return ret, nil
+
+}
