@@ -29,4 +29,3 @@ func FileToInt64(file string) (int64, error) {
 	}
 	return ret, nil
 }
-

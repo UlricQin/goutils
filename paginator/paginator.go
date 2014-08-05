@@ -1,11 +1,11 @@
 package paginator
 
 import (
+	"github.com/ulricqin/goutils/convertor"
 	"math"
 	"net/http"
 	"net/url"
 	"strconv"
-	"github.com/ulricqin/goutils/convertor"
 )
 
 type Paginator struct {
@@ -65,20 +65,20 @@ func (p *Paginator) Pages() []int {
 		case page >= pageNums-4 && pageNums > 9:
 			start := pageNums - 9 + 1
 			pages = make([]int, 9)
-		for i, _ := range pages {
-			pages[i] = start + i
-		}
+			for i, _ := range pages {
+				pages[i] = start + i
+			}
 		case page >= 5 && pageNums > 9:
 			start := page - 5 + 1
 			pages = make([]int, int(math.Min(9, float64(page+4+1))))
-		for i, _ := range pages {
-			pages[i] = start + i
-		}
+			for i, _ := range pages {
+				pages[i] = start + i
+			}
 		default:
 			pages = make([]int, int(math.Min(9, float64(pageNums))))
-		for i, _ := range pages {
-			pages[i] = i + 1
-		}
+			for i, _ := range pages {
+				pages[i] = i + 1
+			}
 		}
 		p.pageRange = pages
 	}

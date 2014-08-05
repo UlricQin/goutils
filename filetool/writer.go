@@ -22,4 +22,3 @@ func WriteBytesToFile(filePath string, b []byte) (int, error) {
 func WriteStringToFile(filePath string, s string) (int, error) {
 	return WriteBytesToFile(filePath, []byte(s))
 }
-

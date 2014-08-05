@@ -2,8 +2,8 @@ package convertor
 
 import (
 	"encoding/binary"
-	"reflect"
 	"fmt"
+	"reflect"
 )
 
 func Int64ToBytes(i int64) []byte {

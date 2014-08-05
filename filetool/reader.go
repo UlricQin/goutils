@@ -1,8 +1,8 @@
 package filetool
 
 import (
-	"io/ioutil"
 	"github.com/ulricqin/goutils/strtool"
+	"io/ioutil"
 )
 
 // ReadFileToBytes reads data type '[]byte' from file by given path.
@@ -33,4 +33,3 @@ func ReadFileToStringNoLn(filePath string) (string, error) {
 
 	return strtool.TrimRightSpace(str), nil
 }
-

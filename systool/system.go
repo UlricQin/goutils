@@ -1,17 +1,17 @@
 package systool
 
 import (
-	"github.com/ulricqin/goutils/filetool"
-	"github.com/ulricqin/goutils/convertor"
+	"bytes"
 	"fmt"
+	"github.com/ulricqin/goutils/convertor"
+	"github.com/ulricqin/goutils/filetool"
+	"math/rand"
+	"net"
 	"os"
 	"os/exec"
 	"strconv"
-	"net"
 	"strings"
-	"math/rand"
 	"time"
-	"bytes"
 )
 
 func WritePidFile(pidFilePath string) error {
@@ -26,7 +26,6 @@ func WritePidFile(pidFilePath string) error {
 
 	return nil
 }
-
 
 func LocalIP() (string, error) {
 	addr, err := net.ResolveUDPAddr("udp", "1.2.3.4:1")
@@ -119,4 +118,68 @@ func SleepRandomDuration(t int) {
 	time.Sleep(d)
 }
 
+func IntranetIP() (string, error) {
+	ifaces, err := net.Interfaces()
+	if err != nil {
+		return "", err
+	}
 
+	for _, iface := range ifaces {
+		if iface.Flags&net.FlagUp == 0 {
+			continue // interface down
+		}
+
+		if iface.Flags&net.FlagLoopback != 0 {
+			continue // loopback interface
+		}
+
+		addrs, err := iface.Addrs()
+		if err != nil {
+			return "", err
+		}
+
+		for _, addr := range addrs {
+			var ip net.IP
+			switch v := addr.(type) {
+			case *net.IPNet:
+				ip = v.IP
+			case *net.IPAddr:
+				ip = v.IP
+			}
+
+			if ip == nil || ip.IsLoopback() {
+				continue
+			}
+
+			ip = ip.To4()
+			if ip == nil {
+				continue // not an ipv4 address
+			}
+
+			ipStr := ip.String()
+			if strings.HasPrefix(ipStr, "10.") || strings.HasPrefix(ipStr, "192.168.") {
+				return ipStr, nil
+			}
+
+			if strings.HasPrefix(ipStr, "172.") {
+				// 172.16.0.0-172.31.255.255
+				arr := strings.Split(ipStr, ".")
+				if len(arr) != 4 {
+					continue
+				}
+
+				var second int64
+				second, err = strconv.ParseInt(arr[1], 10, 64)
+				if err != nil {
+					return "", err
+				}
+
+				if second >= 16 && second <= 31 {
+					return ipStr, nil
+				}
+			}
+		}
+	}
+
+	return "", fmt.Errorf("not found")
+}

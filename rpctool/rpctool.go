@@ -1,10 +1,10 @@
 package rpctool
 
 import (
-	"time"
 	"net"
 	"net/rpc"
 	"net/rpc/jsonrpc"
+	"time"
 )
 
 func DialTimeout(network, address string, timeout time.Duration) (*rpc.Client, error) {
@@ -14,4 +14,3 @@ func DialTimeout(network, address string, timeout time.Duration) (*rpc.Client, e
 	}
 	return jsonrpc.NewClient(conn), err
 }
-
