@@ -118,10 +118,12 @@ func SleepRandomDuration(t int) {
 	time.Sleep(d)
 }
 
-func IntranetIP() (string, error) {
-	ifaces, err := net.Interfaces()
-	if err != nil {
-		return "", err
+func IntranetIP() (ips []string, err error) {
+	ips = make([]string, 0)
+
+	ifaces, e := net.Interfaces()
+	if e != nil {
+		return ips, e
 	}
 
 	for _, iface := range ifaces {
@@ -133,9 +135,9 @@ func IntranetIP() (string, error) {
 			continue // loopback interface
 		}
 
-		addrs, err := iface.Addrs()
-		if err != nil {
-			return "", err
+		addrs, e := iface.Addrs()
+		if e != nil {
+			return ips, e
 		}
 
 		for _, addr := range addrs {
@@ -157,29 +159,36 @@ func IntranetIP() (string, error) {
 			}
 
 			ipStr := ip.String()
-			if strings.HasPrefix(ipStr, "10.") || strings.HasPrefix(ipStr, "192.168.") {
-				return ipStr, nil
-			}
-
-			if strings.HasPrefix(ipStr, "172.") {
-				// 172.16.0.0-172.31.255.255
-				arr := strings.Split(ipStr, ".")
-				if len(arr) != 4 {
-					continue
-				}
-
-				var second int64
-				second, err = strconv.ParseInt(arr[1], 10, 64)
-				if err != nil {
-					return "", err
-				}
-
-				if second >= 16 && second <= 31 {
-					return ipStr, nil
-				}
+			if is_intranet(ipStr) {
+				ips = append(ips, ipStr)
 			}
 		}
 	}
 
-	return "", fmt.Errorf("not found")
+	return ips, nil
+}
+
+func is_intranet(ipStr string) bool {
+	if strings.HasPrefix(ipStr, "10.") || strings.HasPrefix(ipStr, "192.168.") {
+		return true
+	}
+
+	if strings.HasPrefix(ipStr, "172.") {
+		// 172.16.0.0-172.31.255.255
+		arr := strings.Split(ipStr, ".")
+		if len(arr) != 4 {
+			return false
+		}
+
+		second, err := strconv.ParseInt(arr[1], 10, 64)
+		if err != nil {
+			return false
+		}
+
+		if second >= 16 && second <= 31 {
+			return true
+		}
+	}
+
+	return false
 }
