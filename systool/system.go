@@ -135,6 +135,10 @@ func IntranetIP() (ips []string, err error) {
 			continue // loopback interface
 		}
 
+		if strings.HasPrefix(iface.Name, "docker") || strings.HasPrefix(iface.Name, "w-") {
+			continue
+		}
+
 		addrs, e := iface.Addrs()
 		if e != nil {
 			return ips, e
